@@ -1,0 +1,20 @@
+services:
+  app:
+    build: .
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/${DB_NAME:-romashka}
+      SPRING_DATASOURCE_USERNAME: ${DB_USER:-postgres}
+      SPRING_DATASOURCE_PASSWORD: ${DB_PASSWORD:-password}
+      SPRING_JPA_HIBERNATE_DDL_AUTO: update
+    ports:
+      - 8080:8080
+    depends_on:
+      - db
+  db:
+    image: postgres:17
+    restart: always
+    shm_size: 128mb
+    environment:
+      POSTGRES_USER: ${DB_USER:-postgres}
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-password}
+      POSTGRES_DB: ${DB_NAME:-romashka}
