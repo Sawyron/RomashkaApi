@@ -1,5 +1,8 @@
 package com.romashka.api.products;
 
+import com.romashka.api.products.dtos.CreateProductRequest;
+import com.romashka.api.products.dtos.ProductResponse;
+import com.romashka.api.products.dtos.UpdateProductRequest;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -12,15 +15,15 @@ import java.util.UUID;
 @RestController
 @RequestMapping("/api/v1/products")
 public class ProductController {
-    private final InMemoryProductService inMemoryProductService;
+    private final ProductService productService;
 
-    public ProductController(InMemoryProductService inMemoryProductService) {
-        this.inMemoryProductService = inMemoryProductService;
+    public ProductController(ProductService productService) {
+        this.productService = productService;
     }
 
     @PostMapping
-    public ResponseEntity<UUID> create(@RequestBody @Valid Product product) {
-        UUID id = inMemoryProductService.createProduct(product);
+    public ResponseEntity<UUID> create(@RequestBody @Valid CreateProductRequest product) {
+        UUID id = productService.create(product);
         URI url = ServletUriComponentsBuilder.fromCurrentRequest()
                 .path("/{id}")
                 .buildAndExpand(id)
@@ -29,26 +32,26 @@ public class ProductController {
     }
 
     @GetMapping("{id}")
-    public ResponseEntity<Product> getById(@PathVariable UUID id) {
-        Product product = inMemoryProductService.getProductById(id);
+    public ResponseEntity<ProductResponse> getById(@PathVariable UUID id) {
+        var product = productService.findById(id);
         return ResponseEntity.ok(product);
     }
 
     @GetMapping
-    public ResponseEntity<List<Product>> getAll() {
-        List<Product> products = inMemoryProductService.getAllProducts();
+    public ResponseEntity<List<ProductResponse>> getAll() {
+        var products = productService.findAll();
         return ResponseEntity.ok(products);
     }
 
     @PutMapping("{id}")
-    public ResponseEntity<String> update(@PathVariable UUID id, @RequestBody @Valid Product product) {
-        inMemoryProductService.updateProduct(id, product);
-        return ResponseEntity.noContent().build();
+    public ResponseEntity<ProductResponse> update(@PathVariable UUID id, @RequestBody @Valid UpdateProductRequest request) {
+        var product = productService.update(id, request);
+        return ResponseEntity.ok(product);
     }
 
     @DeleteMapping("{id}")
     public ResponseEntity<String> delete(@PathVariable UUID id) {
-        inMemoryProductService.deleteProductById(id);
+        productService.deleteById(id);
         return ResponseEntity.noContent().build();
     }
 }
