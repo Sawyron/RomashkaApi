@@ -5,8 +5,11 @@
 ### GET /{id}
 
 #### Responses
+
 ##### Status 200
+
 ###### Body
+
 ```json
 {
   "id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
@@ -18,7 +21,9 @@
 ```
 
 ##### Status 404
+
 ###### Body
+
 ```json
 {
   "type": "about:blank",
@@ -30,7 +35,9 @@
 ```
 
 ### POST /
+
 #### Body
+
 ```json
 {
   "id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
@@ -40,11 +47,17 @@
   "isAvailable": true
 }
 ````
+
 #### Responses
+
 ##### Status 201
+
 "3fa85f64-5717-4562-b3fc-2c963f66afa6"
+
 ##### Status 400
+
 ###### Body
+
 ```json
 {
   "type": "about:blank",
@@ -57,10 +70,10 @@
 }
 ```
 
-
 ### PUT /{id}
 
 #### Body
+
 ```json
 {
   "id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
@@ -70,11 +83,27 @@
   "isAvailable": true
 }
 ```
+
 #### Responses
+
+##### Body
+
+```json
+{
+  "id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+  "name": "string",
+  "description": "string",
+  "cost": 0,
+  "isAvailable": true
+}
+```
+
 ##### Status 204
 
 ##### Status 400, 404
+
 ###### Body
+
 ```json
 {
   "type": "about:blank",
@@ -90,6 +119,7 @@
 ### DELETE /{id}
 
 #### Body
+
 ```json
 {
   "id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
@@ -99,11 +129,15 @@
   "isAvailable": true
 }
 ```
+
 #### Responses
+
 ##### Status 204
 
 ##### Status 400, 404
+
 ##### Body
+
 ```json
 {
   "type": "about:blank",
@@ -117,9 +151,10 @@
 ```
 
 ### Schemas
+
 - Product
   - id: string(uuid)
   - name: string(255)
   - description: string(4096)
-  - cost: integer, positive
+  - cost: integer, positive, default: 0
   - isAvailable: boolean, default: false
