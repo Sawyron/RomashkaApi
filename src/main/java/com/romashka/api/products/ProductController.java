@@ -3,7 +3,10 @@ package com.romashka.api.products;
 import com.romashka.api.products.dtos.CreateProductRequest;
 import com.romashka.api.products.dtos.ProductResponse;
 import com.romashka.api.products.dtos.UpdateProductRequest;
+import com.romashka.api.validation.sort.ValidSort;
 import jakarta.validation.Valid;
+import org.springdoc.core.annotations.ParameterObject;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -38,8 +41,12 @@ public class ProductController {
     }
 
     @GetMapping
-    public ResponseEntity<List<ProductResponse>> getAll() {
-        var products = productService.findAll();
+    public ResponseEntity<List<ProductResponse>> getAll(
+            ProductFilter filter,
+            @RequestParam(defaultValue = "20") int size,
+            @ParameterObject @Valid @ValidSort(allowedFields = {"name", "price"}) Sort sort
+    ) {
+        var products = productService.findAll(filter.toSpecification(), sort, size);
         return ResponseEntity.ok(products);
     }
 

@@ -5,15 +5,16 @@ import org.springframework.http.ProblemDetail;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
-import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.method.annotation.HandlerMethodValidationException;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.Map;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
-@ControllerAdvice
+@RestControllerAdvice
 public class DefaultControllerAdvice {
     @ExceptionHandler(MethodArgumentNotValidException.class)
     ResponseEntity<ProblemDetail> handleValidationException(MethodArgumentNotValidException ex) {
@@ -26,6 +27,27 @@ public class DefaultControllerAdvice {
         problemDetail.setTitle("Validation failed");
         problemDetail.setProperty("errors", errors);
         return ResponseEntity.badRequest().body(problemDetail);
+    }
+
+    @ExceptionHandler(HandlerMethodValidationException.class)
+    ProblemDetail handleHandlerMethodValidationException(HandlerMethodValidationException ex) {
+        Map<String, String> errors = ex.getAllValidationResults().stream()
+                .collect(Collectors.toMap(
+                                r -> r.getMethodParameter()
+                                        .getParameter()
+                                        .getName(),
+                                r -> r
+                                        .getResolvableErrors()
+                                        .stream()
+                                        .map(MessageSourceResolvable::getDefaultMessage)
+                                        .collect(Collectors.joining(". "))
+                        )
+                );
+        ProblemDetail problemDetail = ProblemDetail.forStatus(HttpStatus.BAD_REQUEST);
+        problemDetail.setInstance(ex.getBody().getInstance());
+        problemDetail.setTitle("Validation failed");
+        problemDetail.setProperty("errors", errors);
+        return problemDetail;
     }
 
     @ExceptionHandler(ResponseStatusException.class)
