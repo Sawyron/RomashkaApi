@@ -6,6 +6,10 @@ import com.romashka.api.products.ProductService;
 import com.romashka.api.products.dtos.CreateProductRequest;
 import com.romashka.api.products.dtos.ProductResponse;
 import com.romashka.api.products.dtos.UpdateProductRequest;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
@@ -32,7 +36,7 @@ public class ProductServiceImpl implements ProductService {
         var product = new Product();
         product.setName(request.name());
         product.setDescription(request.description());
-        product.setCost(request.cost());
+        product.setPrice(request.price());
         product.setAvailable(request.isAvailable());
         productRepository.save(product);
         return product.getId();
@@ -57,6 +61,15 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
+    public List<ProductResponse> findAll(Specification<Product> specification, Sort sort, int size) {
+        Pageable pageable = PageRequest.of(0, size, sort);
+        return productRepository.findAll(specification, pageable)
+                .stream()
+                .map(responseMapper)
+                .toList();
+    }
+
+    @Override
     public ProductResponse update(UUID id, UpdateProductRequest request) {
         Product product = productRepository.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(
@@ -65,7 +78,7 @@ public class ProductServiceImpl implements ProductService {
                 ));
         product.setName(request.name());
         product.setDescription(request.description());
-        product.setCost(request.cost());
+        product.setPrice(request.price());
         product.setAvailable(request.isAvailable());
         productRepository.save(product);
         return responseMapper.apply(product);
