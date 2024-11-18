@@ -25,10 +25,10 @@ public final class Product {
     private String description;
 
     @Column(
-            name = "cost",
+            name = "price",
             nullable = false
     )
-    private int cost;
+    private int price;
 
     @Column(
             name = "is_available",
@@ -60,12 +60,12 @@ public final class Product {
         this.description = description;
     }
 
-    public int getCost() {
-        return cost;
+    public int getPrice() {
+        return price;
     }
 
-    public void setCost(int cost) {
-        this.cost = cost;
+    public void setPrice(int price) {
+        this.price = price;
     }
 
     public boolean isAvailable() {

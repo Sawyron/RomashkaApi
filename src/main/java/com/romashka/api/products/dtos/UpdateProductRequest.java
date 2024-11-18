@@ -7,7 +7,7 @@ import jakarta.validation.constraints.Size;
 public record UpdateProductRequest(
         @NotBlank @Size(max = 255) String name,
         @NotBlank @Size(max = 4096) String description,
-        @Positive int cost,
+        @Positive int price,
         boolean isAvailable
 ) {
 }

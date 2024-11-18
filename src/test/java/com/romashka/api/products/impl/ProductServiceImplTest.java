@@ -55,7 +55,7 @@ class ProductServiceImplTest {
         assertAll(
                 () -> assertEquals(request.name(), product.getName()),
                 () -> assertEquals(request.description(), product.getDescription()),
-                () -> assertEquals(request.cost(), product.getCost()),
+                () -> assertEquals(request.price(), product.getPrice()),
                 () -> assertEquals(request.isAvailable(), product.isAvailable())
         );
     }
@@ -67,7 +67,7 @@ class ProductServiceImplTest {
         product.setId(id);
         product.setName("product");
         product.setDescription("info");
-        product.setCost(100);
+        product.setPrice(100);
         product.setAvailable(true);
         when(productRepository.findById(eq(id))).thenReturn(Optional.of(product));
 
@@ -77,7 +77,7 @@ class ProductServiceImplTest {
                 () -> assertEquals(id, response.id()),
                 () -> assertEquals(product.getName(), response.name()),
                 () -> assertEquals(product.getDescription(), response.description()),
-                () -> assertEquals(product.getCost(), response.cost()),
+                () -> assertEquals(product.getPrice(), response.price()),
                 () -> assertEquals(product.isAvailable(), response.isAvailable())
         );
     }
@@ -99,7 +99,7 @@ class ProductServiceImplTest {
                     product.setId(UUID.fromString("e7120fe4-c7b2-4351-ae1a-f4ca105716" + i % 10));
                     product.setName("product" + i);
                     product.setDescription("info" + i);
-                    product.setCost(i * 100);
+                    product.setPrice(i * 100);
                     product.setAvailable(i % 2 == 0);
                     return product;
                 })
@@ -116,7 +116,7 @@ class ProductServiceImplTest {
                     () -> assertEquals(product.getId(), response.id()),
                     () -> assertEquals(product.getName(), response.name()),
                     () -> assertEquals(product.getDescription(), response.description()),
-                    () -> assertEquals(product.getCost(), response.cost()),
+                    () -> assertEquals(product.getPrice(), response.price()),
                     () -> assertEquals(product.isAvailable(), response.isAvailable())
             );
         }
@@ -129,7 +129,7 @@ class ProductServiceImplTest {
         product.setId(id);
         product.setName("product");
         product.setDescription("info");
-        product.setCost(100);
+        product.setPrice(100);
         product.setAvailable(true);
         when(productRepository.findById(eq(id))).thenReturn(Optional.of(product));
 
@@ -145,11 +145,11 @@ class ProductServiceImplTest {
                 () -> assertEquals(product.getId(), updated.id()),
                 () -> assertEquals(product.getName(), updated.name()),
                 () -> assertEquals(product.getDescription(), updated.description()),
-                () -> assertEquals(product.getCost(), updated.cost()),
+                () -> assertEquals(product.getPrice(), updated.price()),
                 () -> assertEquals(product.isAvailable(), updated.isAvailable()),
                 () -> assertEquals(product.getName(), updateRequest.name()),
                 () -> assertEquals(product.getDescription(), updateRequest.description()),
-                () -> assertEquals(product.getCost(), updateRequest.cost()),
+                () -> assertEquals(product.getPrice(), updateRequest.price()),
                 () -> assertEquals(product.isAvailable(), updateRequest.isAvailable())
         );
     }
@@ -177,7 +177,7 @@ class ProductServiceImplTest {
         product.setId(id);
         product.setName("product");
         product.setDescription("info");
-        product.setCost(100);
+        product.setPrice(100);
         product.setAvailable(true);
         when(productRepository.findById(eq(id))).thenReturn(Optional.of(product));
 

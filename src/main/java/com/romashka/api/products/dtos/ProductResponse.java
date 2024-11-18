@@ -6,7 +6,7 @@ public record ProductResponse(
         UUID id,
         String name,
         String description,
-        int cost,
+        int price,
         boolean isAvailable
 ) {
 }
