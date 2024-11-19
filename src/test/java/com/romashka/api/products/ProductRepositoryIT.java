@@ -57,8 +57,8 @@ class ProductRepositoryIT {
         Sort sort = null;
         for (SortData sortData : sorts) {
             Sort currentSort = Sort.by(sortData.direction, sortData.field);
-            sort = sort == null ?
-                    currentSort
+            sort = sort == null
+                    ? currentSort
                     : sort.and(currentSort);
         }
         assertNotNull(sort);
@@ -66,8 +66,8 @@ class ProductRepositoryIT {
         Comparator<Product> productComparator = null;
         for (SortData sortData : sorts) {
             Comparator<Product> currentComparator = createComparator(sortData.field, sortData.direction);
-            productComparator = productComparator != null ?
-                    productComparator.thenComparing(currentComparator)
+            productComparator = productComparator != null
+                    ? productComparator.thenComparing(currentComparator)
                     : currentComparator;
         }
         assertNotNull(productComparator);

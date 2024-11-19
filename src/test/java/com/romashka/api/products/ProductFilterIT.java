@@ -12,10 +12,8 @@ import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
 
 import java.util.List;
-import java.util.Map;
 import java.util.UUID;
 import java.util.function.Predicate;
-import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -32,11 +30,9 @@ class ProductFilterIT {
     @ServiceConnection
     static PostgreSQLContainer<?> postgreSQLContainer = new PostgreSQLContainer<>("postgres:17");
 
-    private Map<UUID, Product> productMap;
-
     @BeforeEach
     void populate() {
-        productMap = IntStream.range(0, 50).mapToObj(i -> {
+        List<Product> products = IntStream.range(0, 50).mapToObj(i -> {
                     var product = new Product();
                     UUID id = UUID.randomUUID();
                     product.setId(id);
@@ -46,8 +42,8 @@ class ProductFilterIT {
                     product.setPrice(i * 100);
                     return product;
                 })
-                .collect(Collectors.toMap(Product::getId, p -> p));
-        productRepository.saveAll(productMap.values());
+                .toList();
+        productRepository.saveAll(products);
     }
 
     @ParameterizedTest
@@ -92,7 +88,7 @@ class ProductFilterIT {
         for (Product product : actualProducts) {
             assertTrue(productPredicate.test(product));
         }
-        var expectedCount = productMap.values()
+        var expectedCount = productRepository.findAll()
                 .stream()
                 .filter(productPredicate)
                 .count();
