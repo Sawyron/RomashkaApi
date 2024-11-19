@@ -52,13 +52,6 @@ public class ProductServiceImpl implements ProductService {
         return responseMapper.apply(product);
     }
 
-    @Override
-    public List<ProductResponse> findAll() {
-        return productRepository.findAll()
-                .stream()
-                .map(responseMapper)
-                .toList();
-    }
 
     @Override
     public List<ProductResponse> findAll(Specification<Product> specification, Sort sort, int size) {

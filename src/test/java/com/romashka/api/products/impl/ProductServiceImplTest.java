@@ -16,13 +16,9 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.function.Function;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -89,37 +85,6 @@ class ProductServiceImplTest {
 
         ResponseStatusException ex = assertThrows(ResponseStatusException.class, () -> productService.findById(id));
         assertEquals(HttpStatus.NOT_FOUND, ex.getStatusCode());
-    }
-
-    @Test
-    void whenFindAll_thenReturnsList() {
-        List<Product> products = IntStream.range(0, 10)
-                .mapToObj(i -> {
-                    var product = new Product();
-                    product.setId(UUID.fromString("e7120fe4-c7b2-4351-ae1a-f4ca105716" + i % 10));
-                    product.setName("product" + i);
-                    product.setDescription("info" + i);
-                    product.setPrice(i * 100);
-                    product.setAvailable(i % 2 == 0);
-                    return product;
-                })
-                .toList();
-        when(productRepository.findAll()).thenReturn(products);
-
-        List<ProductResponse> productResponses = productService.findAll();
-        assertEquals(products.size(), productResponses.size());
-        Map<UUID, Product> productIdMap = products.stream()
-                .collect(Collectors.toMap(Product::getId, p -> p));
-        for (ProductResponse response : productResponses) {
-            Product product = productIdMap.get(response.id());
-            assertAll(
-                    () -> assertEquals(product.getId(), response.id()),
-                    () -> assertEquals(product.getName(), response.name()),
-                    () -> assertEquals(product.getDescription(), response.description()),
-                    () -> assertEquals(product.getPrice(), response.price()),
-                    () -> assertEquals(product.isAvailable(), response.isAvailable())
-            );
-        }
     }
 
     @Test

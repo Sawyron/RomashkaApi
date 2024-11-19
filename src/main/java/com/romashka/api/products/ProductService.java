@@ -14,8 +14,6 @@ public interface ProductService {
 
     ProductResponse findById(UUID id);
 
-    List<ProductResponse> findAll();
-
     List<ProductResponse> findAll(Specification<Product> specification, Sort sort, int size);
 
     ProductResponse update(UUID id, UpdateProductRequest request);
