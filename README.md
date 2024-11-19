@@ -15,7 +15,7 @@
   "id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
   "name": "string",
   "description": "string",
-  "cost": 0,
+  "price": 0,
   "isAvailable": true
 }
 ```
@@ -34,6 +34,26 @@
 }
 ```
 
+### GET /
+
+#### Query parameters
+
+- name: type - string(256), optional
+- price type - integer, optional
+- isPriceBottom, type - boolean, optional
+- isAvailable: type - boolean, optional
+- size: type - integer, default - 20
+- sort - type string[], format - {filedName},asc|desc
+
+```json
+{
+  "name": "string",
+  "price": 0,
+  "isPriceBottom": true,
+  "isAvailable": true
+}
+```
+
 ### POST /
 
 #### Body
@@ -43,7 +63,7 @@
   "id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
   "name": "string",
   "description": "string",
-  "cost": 0,
+  "price": 0,
   "isAvailable": true
 }
 ````
@@ -65,7 +85,7 @@
   "status": 400,
   "instance": "/api/v1/products/",
   "errors": {
-    "cost": "error description"
+    "price": "error description"
   }
 }
 ```
@@ -79,7 +99,7 @@
   "id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
   "name": "string",
   "description": "string",
-  "cost": 0,
+  "price": 0,
   "isAvailable": true
 }
 ```
@@ -93,7 +113,7 @@
   "id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
   "name": "string",
   "description": "string",
-  "cost": 0,
+  "price": 0,
   "isAvailable": true
 }
 ```
@@ -111,7 +131,7 @@
   "status": 400,
   "instance": "/api/v1/products/3fa85f64-5717-4562-b3fc-2c963f66afa6",
   "errors": {
-    "cost": "error description"
+    "price": "error description"
   }
 }
 ```
@@ -125,7 +145,7 @@
   "id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
   "name": "string",
   "description": "string",
-  "cost": 0,
+  "price": 0,
   "isAvailable": true
 }
 ```
@@ -145,7 +165,7 @@
   "status": 400,
   "instance": "/api/v1/products/3fa85f64-5717-4562-b3fc-2c963f66afa6",
   "errors": {
-    "cost": "error description"
+    "price": "error description"
   }
 }
 ```
@@ -156,5 +176,5 @@
   - id: string(uuid)
   - name: string(255)
   - description: string(4096)
-  - cost: integer, positive, default: 0
+  - price: integer, positive, default: 0
   - isAvailable: boolean, default: false
