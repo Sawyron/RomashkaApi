@@ -1,6 +1,7 @@
 package com.romashka.api.products;
 
 import jakarta.persistence.*;
+import org.hibernate.annotations.ColumnDefault;
 
 import java.util.UUID;
 
@@ -30,11 +31,13 @@ public final class Product {
     )
     private int price;
 
+
     @Column(
-            name = "is_available",
+            name = "quantity",
             nullable = false
     )
-    private boolean isAvailable;
+    @ColumnDefault("0")
+    private int quantity;
 
     public UUID getId() {
         return id;
@@ -68,11 +71,11 @@ public final class Product {
         this.price = price;
     }
 
-    public boolean isAvailable() {
-        return isAvailable;
+    public int getQuantity() {
+        return quantity;
     }
 
-    public void setAvailable(boolean available) {
-        isAvailable = available;
+    public void setQuantity(int quantity) {
+        this.quantity = quantity;
     }
 }

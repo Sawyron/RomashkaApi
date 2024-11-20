@@ -36,7 +36,7 @@ class ProductRepositoryIT {
                     product.setId(id);
                     product.setName("product_" + id);
                     product.setDescription("info_" + new StringBuilder(id.toString()).reverse());
-                    product.setAvailable(i % 2 == 0);
+                    product.setQuantity(i % 2 == 0 ? 0 : i * 10);
                     product.setPrice(i * 100);
                     return product;
                 })

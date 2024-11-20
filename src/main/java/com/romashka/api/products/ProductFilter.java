@@ -6,7 +6,7 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.util.StringUtils;
 
 public record ProductFilter(
-        @Size(max = 256) String name,
+        @Size(max = 255) String name,
         Integer price,
         Boolean isPriceBottom,
         Boolean isAvailable
@@ -38,8 +38,14 @@ public record ProductFilter(
     }
 
     private Specification<Product> createAvailableSpec() {
-        return (root, query, cb) -> isAvailable != null
-                ? cb.equal(root.get("isAvailable"), isAvailable)
-                : null;
+        return (root, query, cb) -> {
+            if (isAvailable == null) {
+                return null;
+            }
+            Path<Integer> quantityPath = root.get("quantity");
+            return isAvailable
+                    ? cb.greaterThan(quantityPath, 0)
+                    : cb.lessThanOrEqualTo(quantityPath, 0);
+        };
     }
 }

@@ -7,6 +7,6 @@ public record ProductResponse(
         String name,
         String description,
         int price,
-        boolean isAvailable
+        int quantity
 ) {
 }

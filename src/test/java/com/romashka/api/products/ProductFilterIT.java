@@ -34,7 +34,7 @@ class ProductFilterIT {
                     product.setId(id);
                     product.setName(i + "product" + i);
                     product.setDescription("info" + i);
-                    product.setAvailable(i % 2 == 0);
+                    product.setQuantity(i % 2 == 0 ? 0 : i * 10);
                     product.setPrice(i * 100);
                     return product;
                 })
@@ -68,7 +68,7 @@ class ProductFilterIT {
         var filter = new ProductFilter(name, price, isPriceBottom, isAvailable);
         Predicate<Product> productPredicate = p -> true;
         if (name != null) {
-            productPredicate = p -> p.getName().toLowerCase().contains(name.toLowerCase());
+            productPredicate = productPredicate.and(p -> p.getName().toLowerCase().contains(name.toLowerCase()));
         }
         final boolean actualIsPriceBottom = isPriceBottom != null && isPriceBottom;
         if (price != null) {
@@ -78,7 +78,9 @@ class ProductFilterIT {
             productPredicate = productPredicate.and(pricePredicate);
         }
         if (isAvailable != null) {
-            productPredicate = productPredicate.and(p -> p.isAvailable() == isAvailable);
+            productPredicate = productPredicate.and(isAvailable
+                    ? p -> p.getQuantity() > 0
+                    : p -> p.getQuantity() == 0);
         }
         List<Product> actualProducts = productRepository.findAll(filter.toSpecification());
         for (Product product : actualProducts) {
