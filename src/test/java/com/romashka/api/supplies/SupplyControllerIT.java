@@ -164,6 +164,23 @@ class SupplyControllerIT {
     }
 
     @Test
+    void whenUpdateWithProductAndInvalidQuantity_thenStatus409() throws Exception {
+        Product initialProduct = createProduct();
+        initialProduct.setQuantity(10);
+        Product updatedProduct = createProduct();
+        Supply supply = createSupply(initialProduct);
+        supply.setQuantity(50);
+        productRepository.saveAll(List.of(initialProduct, updatedProduct));
+        supplyRepository.save(supply);
+
+        var updateRequest = new UpdateSupplyRequest("doc2", updatedProduct.getId(), 20);
+        mockMvc.perform(put(BASE_URL + "/{id}", supply.getId())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(updateRequest)))
+                .andExpect(status().isConflict());
+    }
+
+    @Test
     void whenUpdateWithNotExistingProduct_thenStatus404() throws Exception {
         Product product = createProduct();
         Supply supply = createSupply(product);
@@ -180,7 +197,7 @@ class SupplyControllerIT {
     }
 
     @Test
-    void whenDelete_thenStatus404() throws Exception {
+    void whenDelete_thenStatus204() throws Exception {
         Product product = createProduct();
         Supply supply = createSupply(product);
         product.setQuantity(supply.getQuantity());
@@ -190,6 +207,19 @@ class SupplyControllerIT {
         mockMvc.perform(delete(BASE_URL + "/{id}", supply.getId()))
                 .andExpect(status().isNoContent());
         assertFalse(supplyRepository.existsById(supply.getId()));
+    }
+
+    @Test
+    void whenDeleteInvalidSupply_thenStatus409() throws Exception {
+        Product product = createProduct();
+        product.setQuantity(10);
+        Supply supply = createSupply(product);
+        supply.setQuantity(50);
+        productRepository.save(product);
+        supplyRepository.save(supply);
+
+        mockMvc.perform(delete(BASE_URL + "/{id}", supply.getId()))
+                .andExpect(status().isConflict());
     }
 
     @Test

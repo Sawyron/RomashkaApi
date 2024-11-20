@@ -10,8 +10,10 @@ import com.romashka.api.supplies.dtos.CreateSupplyRequest;
 import com.romashka.api.supplies.dtos.SupplyResponse;
 import com.romashka.api.supplies.dtos.UpdateSupplyRequest;
 import com.romashka.api.supplies.exceptions.SupplyNotFoundException;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 import java.util.UUID;
@@ -73,8 +75,20 @@ public class SupplyServiceImpl implements SupplyService {
         int productCountDiff = supply.getProduct().getId().equals(request.productId())
                 ? supply.getQuantity() - request.quantity()
                 : -request.quantity();
+        if (product.getQuantity() - productCountDiff < 0) {
+            throw new ResponseStatusException(
+                    HttpStatus.CONFLICT,
+                    "Unable to update supply with id %s. This leads to negative product count"
+            );
+        }
         if (!supply.getProduct().getId().equals(request.productId())) {
             Product oldProduct = supply.getProduct();
+            if (oldProduct.getQuantity() - supply.getQuantity() < 0) {
+                throw new ResponseStatusException(
+                        HttpStatus.CONFLICT,
+                        "Unable to update supply with id %s. This leads to negative product count"
+                );
+            }
             oldProduct.setQuantity(oldProduct.getQuantity() - supply.getQuantity());
         }
         supply.setDocument(request.document());
@@ -90,6 +104,12 @@ public class SupplyServiceImpl implements SupplyService {
         Supply supply = supplyRepository.findByIdWithProduct(id)
                 .orElseThrow(() -> new SupplyNotFoundException(id));
         Product product = supply.getProduct();
+        if (product.getQuantity() - supply.getQuantity() < 0) {
+            throw new ResponseStatusException(
+                    HttpStatus.CONFLICT,
+                    "Unable to delete supply with id %s. This leads to negative product count"
+            );
+        }
         product.setQuantity(product.getQuantity() - supply.getQuantity());
         supplyRepository.delete(supply);
     }
