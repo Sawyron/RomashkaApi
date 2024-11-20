@@ -6,13 +6,12 @@ import com.romashka.api.products.ProductService;
 import com.romashka.api.products.dtos.CreateProductRequest;
 import com.romashka.api.products.dtos.ProductResponse;
 import com.romashka.api.products.dtos.UpdateProductRequest;
+import com.romashka.api.products.exceptions.ProductNotFoundException;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 import java.util.UUID;
@@ -37,7 +36,6 @@ public class ProductServiceImpl implements ProductService {
         product.setName(request.name());
         product.setDescription(request.description());
         product.setPrice(request.price());
-        product.setAvailable(request.isAvailable());
         productRepository.save(product);
         return product.getId();
     }
@@ -45,10 +43,7 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public ProductResponse findById(UUID id) {
         Product product = productRepository.findById(id)
-                .orElseThrow(() -> new ResponseStatusException(
-                        HttpStatus.NOT_FOUND,
-                        "Product with id %s is not found".formatted(id)
-                ));
+                .orElseThrow(() -> new ProductNotFoundException(id));
         return responseMapper.apply(product);
     }
 
@@ -65,14 +60,10 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public ProductResponse update(UUID id, UpdateProductRequest request) {
         Product product = productRepository.findById(id)
-                .orElseThrow(() -> new ResponseStatusException(
-                        HttpStatus.NOT_FOUND,
-                        "Product with id %s is not found".formatted(id)
-                ));
+                .orElseThrow(() -> new ProductNotFoundException(id));
         product.setName(request.name());
         product.setDescription(request.description());
         product.setPrice(request.price());
-        product.setAvailable(request.isAvailable());
         productRepository.save(product);
         return responseMapper.apply(product);
     }
@@ -80,10 +71,7 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public void deleteById(UUID id) {
         Product product = productRepository.findById(id)
-                .orElseThrow(() -> new ResponseStatusException(
-                        HttpStatus.NOT_FOUND,
-                        "Product with id %s is not found".formatted(id)
-                ));
+                .orElseThrow(() -> new ProductNotFoundException(id));
         productRepository.delete(product);
     }
 }
