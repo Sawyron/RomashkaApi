@@ -1,5 +1,9 @@
 package com.romashka.api.errors;
 
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import org.springframework.context.MessageSourceResolvable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ProblemDetail;
@@ -52,6 +56,14 @@ public class DefaultControllerAdvice {
     }
 
     @ExceptionHandler(ResponseStatusException.class)
+    @ApiResponses({
+            @ApiResponse(
+                    responseCode = "100-511",
+                    description = "Problem details", content = @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = ProblemDetail.class))
+            )
+    })
     ResponseEntity<ProblemDetail> handleResponseStatusException(ResponseStatusException ex) {
         ProblemDetail problemDetail = ProblemDetail.forStatus(ex.getStatusCode());
         problemDetail.setInstance(ex.getBody().getInstance());
