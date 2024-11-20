@@ -1,180 +1,353 @@
-# Romashka Co. API
+# Romashka Co. Api
 
-## Products [/api/v1/products]
+## Paths
 
-### GET /{id}
+### /api/v1/supplies/{id}
 
-#### Responses
+#### GET
 
-##### Status 200
+- **Tags:** supply-controller
+- **OperationId:** getById
+- **Parameters:**
+  - `id` (path, required, string, format: uuid)
+- **Responses:**
+  - **200:** OK
+    - **Content:** `*/*`
+      - **Schema:** [SupplyResponse](#supplyresponse)
+  - **100-511:** Problem details
+    - **Content:** `application/json`
+      - **Schema:** [ProblemDetail](#problemdetail)
 
-###### Body
+#### PUT
 
-```json
-{
-  "id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
-  "name": "string",
-  "description": "string",
-  "price": 0,
-  "isAvailable": true
-}
-```
+- **Tags:** supply-controller
+- **OperationId:** update
+- **Parameters:**
+  - `id` (path, required, string, format: uuid)
+- **Request Body:**
+  - **Content:** `application/json`
+    - **Schema:** [UpdateSupplyRequest](#updatesupplyrequest)
+- **Responses:**
+  - **200:** OK
+    - **Content:** `*/*`
+      - **Schema:** [SupplyResponse](#supplyresponse)
+  - **100-511:** Problem details
+    - **Content:** `application/json`
+      - **Schema:** [ProblemDetail](#problemdetail)
 
-##### Status 404
+#### DELETE
 
-###### Body
+- **Tags:** supply-controller
+- **OperationId:** deleteById
+- **Parameters:**
+  - `id` (path, required, string, format: uuid)
+- **Responses:**
+  - **200:** OK
+    - **Content:** `*/*`
+      - **Schema:** string
+  - **100-511:** Problem details
+    - **Content:** `application/json`
+      - **Schema:** [ProblemDetail](#problemdetail)
 
-```json
-{
-  "type": "about:blank",
-  "title": "404 NOT_FOUND",
-  "status": 404,
-  "detail": "product with id 3fa85f64-5717-4562-b3fc-2c963f66afa6 is not found",
-  "instance": "/api/v1/products/3fa85f64-5717-4562-b3fc-2c963f66afa6"
-}
-```
+### /api/v1/sales/{id}
 
-### GET /
+#### GET
 
-#### Query parameters
+- **Tags:** sale-controller
+- **OperationId:** findById
+- **Parameters:**
+  - `id` (path, required, string, format: uuid)
+- **Responses:**
+  - **200:** OK
+    - **Content:** `*/*`
+      - **Schema:** [SaleResponse](#saleresponse)
+  - **100-511:** Problem details
+    - **Content:** `application/json`
+      - **Schema:** [ProblemDetail](#problemdetail)
 
-- name: type - string(256), optional
-- price type - integer, optional
-- isPriceBottom, type - boolean, optional
-- isAvailable: type - boolean, optional
-- size: type - integer, default - 20
-- sort - type string[], format - {filedName},asc|desc
+#### PUT
 
-```json
-{
-  "name": "string",
-  "price": 0,
-  "isPriceBottom": true,
-  "isAvailable": true
-}
-```
+- **Tags:** sale-controller
+- **OperationId:** update_1
+- **Parameters:**
+  - `id` (path, required, string, format: uuid)
+- **Request Body:**
+  - **Content:** `application/json`
+    - **Schema:** [UpdateSaleRequest](#updatesalerequest)
+- **Responses:**
+  - **200:** OK
+    - **Content:** `*/*`
+      - **Schema:** [SaleResponse](#saleresponse)
+  - **100-511:** Problem details
+    - **Content:** `application/json`
+      - **Schema:** [ProblemDetail](#problemdetail)
 
-### POST /
+#### DELETE
 
-#### Body
+- **Tags:** sale-controller
+- **OperationId:** delete
+- **Parameters:**
+  - `id` (path, required, string, format: uuid)
+- **Responses:**
+  - **200:** OK
+    - **Content:** `*/*`
+      - **Schema:** string
+  - **100-511:** Problem details
+    - **Content:** `application/json`
+      - **Schema:** [ProblemDetail](#problemdetail)
 
-```json
-{
-  "id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
-  "name": "string",
-  "description": "string",
-  "price": 0,
-  "isAvailable": true
-}
-````
+### /api/v1/products/{id}
 
-#### Responses
+#### GET
 
-##### Status 201
+- **Tags:** product-controller
+- **OperationId:** getById_1
+- **Parameters:**
+  - `id` (path, required, string, format: uuid)
+- **Responses:**
+  - **200:** OK
+    - **Content:** `*/*`
+      - **Schema:** [ProductResponse](#productresponse)
+  - **100-511:** Problem details
+    - **Content:** `application/json`
+      - **Schema:** [ProblemDetail](#problemdetail)
 
-"3fa85f64-5717-4562-b3fc-2c963f66afa6"
+#### PUT
 
-##### Status 400
+- **Tags:** product-controller
+- **OperationId:** update_2
+- **Parameters:**
+  - `id` (path, required, string, format: uuid)
+- **Request Body:**
+  - **Content:** `application/json`
+    - **Schema:** [UpdateProductRequest](#updateproductrequest)
+- **Responses:**
+  - **200:** OK
+    - **Content:** `*/*`
+      - **Schema:** [ProductResponse](#productresponse)
+  - **100-511:** Problem details
+    - **Content:** `application/json`
+      - **Schema:** [ProblemDetail](#problemdetail)
 
-###### Body
+#### DELETE
 
-```json
-{
-  "type": "about:blank",
-  "title": "Validation failed",
-  "status": 400,
-  "instance": "/api/v1/products/",
-  "errors": {
-    "price": "error description"
-  }
-}
-```
+- **Tags:** product-controller
+- **OperationId:** delete_1
+- **Parameters:**
+  - `id` (path, required, string, format: uuid)
+- **Responses:**
+  - **200:** OK
+    - **Content:** `*/*`
+      - **Schema:** string
+  - **100-511:** Problem details
+    - **Content:** `application/json`
+      - **Schema:** [ProblemDetail](#problemdetail)
 
-### PUT /{id}
+### /api/v1/supplies
 
-#### Body
+#### GET
 
-```json
-{
-  "id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
-  "name": "string",
-  "description": "string",
-  "price": 0,
-  "isAvailable": true
-}
-```
+- **Tags:** supply-controller
+- **OperationId:** getAll
+- **Responses:**
+  - **200:** OK
+    - **Content:** `*/*`
+      - **Schema:** array of [SupplyResponse](#supplyresponse)
+  - **100-511:** Problem details
+    - **Content:** `application/json`
+      - **Schema:** [ProblemDetail](#problemdetail)
 
-#### Responses
+#### POST
 
-##### Body
+- **Tags:** supply-controller
+- **OperationId:** create
+- **Request Body:**
+  - **Content:** `application/json`
+    - **Schema:** [CreateSupplyRequest](#createsupplyrequest)
+- **Responses:**
+  - **200:** OK
+    - **Content:** `*/*`
+      - **Schema:** string (format: uuid)
+  - **100-511:** Problem details
+    - **Content:** `application/json`
+      - **Schema:** [ProblemDetail](#problemdetail)
 
-```json
-{
-  "id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
-  "name": "string",
-  "description": "string",
-  "price": 0,
-  "isAvailable": true
-}
-```
+### /api/v1/sales
 
-##### Status 204
+#### GET
 
-##### Status 400, 404
+- **Tags:** sale-controller
+- **OperationId:** findAll
+- **Responses:**
+  - **200:** OK
+    - **Content:** `*/*`
+      - **Schema:** array of [SaleResponse](#saleresponse)
+  - **100-511:** Problem details
+    - **Content:** `application/json`
+      - **Schema:** [ProblemDetail](#problemdetail)
 
-###### Body
+#### POST
 
-```json
-{
-  "type": "about:blank",
-  "title": "Validation failed",
-  "status": 400,
-  "instance": "/api/v1/products/3fa85f64-5717-4562-b3fc-2c963f66afa6",
-  "errors": {
-    "price": "error description"
-  }
-}
-```
+- **Tags:** sale-controller
+- **OperationId:** create_1
+- **Request Body:**
+  - **Content:** `application/json`
+    - **Schema:** [CreateSaleRequest](#createsalerequest)
+- **Responses:**
+  - **200:** OK
+    - **Content:** `*/*`
+      - **Schema:** string (format: uuid)
+  - **100-511:** Problem details
+    - **Content:** `application/json`
+      - **Schema:** [ProblemDetail](#problemdetail)
 
-### DELETE /{id}
+### /api/v1/products
 
-#### Body
+#### GET
 
-```json
-{
-  "id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
-  "name": "string",
-  "description": "string",
-  "price": 0,
-  "isAvailable": true
-}
-```
+- **Tags:** product-controller
+- **OperationId:** getAll_1
+- **Parameters:**
+  - `filter` (query, required, [ProductFilter](#productfilter))
+  - `size` (query, optional, integer, format: int32, default: 20)
+  - `sort` (query, optional, array of string, description: Sorting criteria in the format: property,(asc|desc). Default
+    sort order is ascending. Multiple sort criteria are supported.)
+- **Responses:**
+  - **200:** OK
+    - **Content:** `*/*`
+      - **Schema:** array of [ProductResponse](#productresponse)
+  - **100-511:** Problem details
+    - **Content:** `application/json`
+      - **Schema:** [ProblemDetail](#problemdetail)
 
-#### Responses
+#### POST
 
-##### Status 204
+- **Tags:** product-controller
+- **OperationId:** create_2
+- **Request Body:**
+  - **Content:** `application/json`
+    - **Schema:** [CreateProductRequest](#createproductrequest)
+- **Responses:**
+  - **200:** OK
+    - **Content:** `*/*`
+      - **Schema:** string (format: uuid)
+  - **100-511:** Problem details
+    - **Content:** `application/json`
+      - **Schema:** [ProblemDetail](#problemdetail)
 
-##### Status 400, 404
-
-##### Body
-
-```json
-{
-  "type": "about:blank",
-  "title": "Validation failed",
-  "status": 400,
-  "instance": "/api/v1/products/3fa85f64-5717-4562-b3fc-2c963f66afa6",
-  "errors": {
-    "price": "error description"
-  }
-}
-```
+## Components
 
 ### Schemas
 
-- Product
-  - id: string(uuid)
-  - name: string(255)
-  - description: string(4096)
-  - price: integer, positive, default: 0
-  - isAvailable: boolean, default: false
+#### ProblemDetail
+
+- **Type:** object
+- **Properties:**
+  - `type` (string, format: uri)
+  - `title` (string)
+  - `status` (integer, format: int32)
+  - `detail` (string)
+  - `instance` (string, format: uri)
+  - `properties` (object, additionalProperties: object)
+
+#### UpdateSupplyRequest
+
+- **Type:** object
+- **Required:**
+  - `document`
+- **Properties:**
+  - `document` (string, maxLength: 255, minLength: 0)
+  - `productId` (string, format: uuid)
+  - `quantity` (integer, format: int32)
+
+#### SupplyResponse
+
+- **Type:** object
+- **Properties:**
+  - `id` (string, format: uuid)
+  - `document` (string)
+  - `productId` (string, format: uuid)
+  - `quantity` (integer, format: int32)
+
+#### UpdateSaleRequest
+
+- **Type:** object
+- **Required:**
+  - `document`
+- **Properties:**
+  - `document` (string, maxLength: 255, minLength: 0)
+  - `quantity` (integer, format: int32)
+  - `productId` (string, format: uuid)
+
+#### SaleResponse
+
+- **Type:** object
+- **Properties:**
+  - `id` (string, format: uuid)
+  - `document` (string)
+  - `quantity` (integer, format: int32)
+  - `productId` (string, format: uuid)
+  - `totalPrice` (integer, format: int64)
+
+#### UpdateProductRequest
+
+- **Type:** object
+- **Required:**
+  - `description`
+  - `name`
+- **Properties:**
+  - `name` (string, maxLength: 255, minLength: 0)
+  - `description` (string, maxLength: 4096, minLength: 0)
+  - `price` (integer, format: int32)
+  - `isAvailable` (boolean)
+
+#### ProductResponse
+
+- **Type:** object
+- **Properties:**
+  - `id` (string, format: uuid)
+  - `name` (string)
+  - `description` (string)
+  - `price` (integer, format: int32)
+  - `quantity` (integer, format: int32)
+
+#### CreateSupplyRequest
+
+- **Type:** object
+- **Required:**
+  - `document`
+- **Properties:**
+  - `document` (string, maxLength: 255, minLength: 0)
+  - `productId` (string, format: uuid)
+  - `quantity` (integer, format: int32)
+
+#### CreateSaleRequest
+
+- **Type:** object
+- **Required:**
+  - `document`
+- **Properties:**
+  - `document` (string, maxLength: 255, minLength: 0)
+  - `quantity` (integer, format: int32)
+  - `productId` (string, format: uuid)
+
+#### CreateProductRequest
+
+- **Type:** object
+- **Required:**
+  - `description`
+  - `name`
+- **Properties:**
+  - `name` (string, maxLength: 255, minLength: 0)
+  - `description` (string, maxLength: 4096, minLength: 0)
+  - `price` (integer, format: int32)
+  - `isAvailable` (boolean)
+
+#### ProductFilter
+
+- **Type:** object
+- **Properties:**
+  - `name` (string, maxLength: 255, minLength: 0)
+  - `price` (integer, format: int32)
+  - `isPriceBottom` (boolean)
+  - `isAvailable` (boolean)
